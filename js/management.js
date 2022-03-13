@@ -7,39 +7,48 @@ function getInputAmount(inputFieldId) {
     return inputValue;
 }
 
+function getInnerTextValue(fieldId) {
+    const field = document.getElementById(fieldId);
+    const fieldValueInText = field.innerText;
+    const value = parseFloat(fieldValueInText);
+    return value;
+}
+
 // amount update in deposit field
-function updateTotal(totalFieldId, inputAmount) {
-    const totalField = document.getElementById(totalFieldId);
-    const previousTotalText = totalField.innerText;
-    const previousTotal = parseFloat(previousTotalText);
+function updateTotal(fieldId, inputAmount) {
+    const previousTotal = getInnerTextValue(fieldId);
     const newTotal = previousTotal + inputAmount;
-    totalField.innerText = newTotal;
+    document.getElementById(fieldId).innerText = newTotal;
+    return newTotal;
 }
 
 // updating balance
 function updateBalance(inputAmount, isAdd) {
-    const balanceField = document.getElementById('balance-total');
-    const previousBalanceText = balanceField.innerText;
-    const previousBalance = parseFloat(previousBalanceText);
+    const previousBalance = getInnerTextValue('balance-total');
     let newBalance;
     if (isAdd == true) {
         newBalance = previousBalance + inputAmount;
     } else {
         newBalance = previousBalance - inputAmount;
     }
-    balanceField.innerText = newBalance;
+    document.getElementById('balance-total').innerText = newBalance;
 }
 
 // deposit..
 document.getElementById('deposit-button').addEventListener('click', function () {
     const depositInputAmount = getInputAmount('deposit-input');
-    updateTotal('deposit-total', depositInputAmount);
-    updateBalance(depositInputAmount, true);
+    if (depositInputAmount > 0) {
+        updateTotal('deposit-total', depositInputAmount);
+        updateBalance(depositInputAmount, true);
+    }
 })
 
 // withdraw..
 document.getElementById('withdraw-button').addEventListener('click', function () {
     const withdrawInputAmount = getInputAmount('withdraw-input');
-    updateTotal('withdraw-total', withdrawInputAmount);
-    updateBalance(withdrawInputAmount, false);
+    const totalBalance = getInnerTextValue('balance-total');
+    if (withdrawInputAmount > 0 && withdrawInputAmount <= totalBalance) {
+        updateTotal('withdraw-total', withdrawInputAmount);
+        updateBalance(withdrawInputAmount, false);
+    }
 })
