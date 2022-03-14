@@ -40,6 +40,8 @@ document.getElementById('deposit-button').addEventListener('click', function () 
     if (depositInputAmount > 0) {
         updateTotal('deposit-total', depositInputAmount);
         updateBalance(depositInputAmount, true);
+    } else {
+        alert('please enter positive number and less than the balance!!');
     }
 })
 
@@ -50,5 +52,7 @@ document.getElementById('withdraw-button').addEventListener('click', function ()
     if (withdrawInputAmount > 0 && withdrawInputAmount <= totalBalance) {
         updateTotal('withdraw-total', withdrawInputAmount);
         updateBalance(withdrawInputAmount, false);
+    } else {
+        alert('please enter positive number and less than the balance!!');
     }
 })
